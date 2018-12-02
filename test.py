@@ -46,6 +46,8 @@ class TwitterClient(object):
                 parsed_tweet['text'] = tweet.text 
                 # saving sentiment of tweet 
                 parsed_tweet['sentiment'] = get_tweet_sentiment(tweet.text) 
+                # saving gender of user
+                parsed_tweet['gender'] = get_gender(tweet.user.name.split(' ')[0]) 
                 # appending parsed tweet to tweets list 
                 if tweet.retweet_count > 0:
                     # if tweet has retweets, ensure that it is appended only once 
@@ -80,6 +82,9 @@ def time_finder(fetched_tweets,num=10):
         ct.append(t.created_at.hour)
     c=Counter(ct)
     return c.most_common()[:num]
+
+def get_gender(tweet):
+    
 
 def word_finder(fetched_tweets,num=10):
     ct=[]
@@ -120,32 +125,36 @@ def main(data_dir,query,count=100,Save=True,load=True):
         if Save:
             np.save(data_dir+'/'+query + '_' + str(count) + '_r.npy', fetched_tweets)
             np.save(data_dir+'/'+query + '_' + str(count) + '.npy', tweets)
-    print(len(tweets))
-    print(word_finder(fetched_tweets,20))
-    print(hashtag_finder(fetched_tweets,10))
-    print(time_finder(fetched_tweets,10))
-    # picking positive tweets from tweets 
-    ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive'] 
-    # percentage of positive tweets 
-    print("Positive tweets percentage: {} %".format(100*len(ptweets)/len(tweets))) 
-    # picking negative tweets from tweets 
-    ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative'] 
-    # percentage of negative tweets 
-    print("Negative tweets percentage: {} %".format(100*len(ntweets)/len(tweets))) 
-    # percentage of neutral tweets 
-    print("Neutral tweets percentage: {} %".format(100*(len(tweets)-len(ntweets)-len(ptweets))/len(tweets))) 
+
+    name_finder(fetched_tweets)
+
+    # print(len(tweets))
+    # print(word_finder(fetched_tweets,20))
+    # print(hashtag_finder(fetched_tweets,10))
+    # print(time_finder(fetched_tweets,10))
+    # # picking positive tweets from tweets 
+    # ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive'] 
+    # # percentage of positive tweets 
+    # print("Positive tweets percentage: {} %".format(100*len(ptweets)/len(tweets))) 
+    # # picking negative tweets from tweets 
+    # ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative'] 
+    # # percentage of negative tweets 
+    # print("Negative tweets percentage: {} %".format(100*len(ntweets)/len(tweets))) 
+    # # percentage of neutral tweets 
+    # print("Neutral tweets percentage: {} %".format(100*(len(tweets)-len(ntweets)-len(ptweets))/len(tweets))) 
   
-    # printing first 5 positive tweets 
-    print("\n\nPositive tweets:") 
-    for tweet in ptweets[:10]: 
-         print(tweet['text']) 
+    # # printing first 5 positive tweets 
+    # print("\n\nPositive tweets:") 
+    # for tweet in ptweets[:10]: 
+    #      print(tweet['text']) 
   
-    # printing first 5 negative tweets 
-    print("\n\nNegative tweets:") 
-    for tweet in ntweets[:10]: 
-         print(tweet['text']) 
+    # # printing first 5 negative tweets 
+    # print("\n\nNegative tweets:") 
+    # for tweet in ntweets[:10]: 
+    #      print(tweet['text']) 
   
 if __name__ == "__main__":
     data_dir= 'data'
-    query=input("Enter Query:\n")
+    # query=input("Enter Query:\n")
+    query='good luck'
     main(data_dir,query)
