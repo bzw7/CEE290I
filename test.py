@@ -90,8 +90,10 @@ def time_finder(fetched_tweets,num=10):
     return c.most_common()[:num]
 
 def get_gender(name):
+    name=name.lower()
     try:
         nf=np.load(data_dir+'/'+name_file)
+        nf=nf[()]
     except:
         nf={}
     if name in nf:
@@ -110,9 +112,9 @@ def get_gender(name):
         except:
             # print(results["error"])
             return 'None'
-        nf[name]=retrn[0]
-        np.save(data_dir+'/'+name_file,nf)
-        return retrn[0]
+        nf[name]=retrn[0][0]
+        np.save(data_dir+'/'+name_file)
+        return retrn[0][0]
 
 def clean_word(word):
     regex = re.compile('[^a-zA-Z]')
@@ -182,7 +184,7 @@ def main(data_dir,query,count=100,Save=True,load=True):
         print("ERROR: No Tweets Obtained")
 
     # picking female names from tweets 
-    ftweets = [tweet for tweet in tweets if tweet['gender'][0] == 'female'] 
+    ftweets = [tweet for tweet in tweets if tweet['gender'] == 'female'] 
     pftweets = [tweet for tweet in ftweets if tweet['sentiment'] == 'positive']
     nftweets = [tweet for tweet in ftweets if tweet['sentiment'] == 'negative']
     
@@ -196,7 +198,7 @@ def main(data_dir,query,count=100,Save=True,load=True):
         print("\nERROR: No female tweets")
     # picking male names from tweets 
 
-    mtweets = [tweet for tweet in tweets if tweet['gender'][0] == 'male'] 
+    mtweets = [tweet for tweet in tweets if tweet['gender'] == 'male'] 
     pmtweets = [tweet for tweet in mtweets if tweet['sentiment'] == 'positive']
     nmtweets = [tweet for tweet in mtweets if tweet['sentiment'] == 'negative']
     if len(mtweets)!=0:
@@ -220,8 +222,8 @@ def main(data_dir,query,count=100,Save=True,load=True):
     #      print(tweet['text']) 
   
 if __name__ == "__main__":
-    # query=input("Enter Query:\n")
-    query='brunch'
+    query=input("Enter Query:\n")
+    # query='brunch'
     t1=datetime.datetime.now()
     main(data_dir,query)
     t2=datetime.datetime.now()
