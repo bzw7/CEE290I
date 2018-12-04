@@ -2,4 +2,4 @@ gender = { 'ÉDOUARD': 'male', 'FRANÇOIS': 'male', 'LIAM': 'male', 'ALEXEY': 'm
 
 
 import numpy as np
-np.save('data/name,npy',gender)
+np.save('data/name.npy',gender)

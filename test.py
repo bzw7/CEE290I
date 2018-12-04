@@ -99,11 +99,11 @@ def get_gender(name):
     if name in nf:
         return nf[name]
     else:
-        url="name[0]="+name    
-        req = requests.get("https://api.genderize.io?" + url)
-        results = json.loads(req.text)
-        retrn = []
         try:
+            url="name[0]="+name    
+            req = requests.get("https://api.genderize.io?" + url)
+            results = json.loads(req.text)
+            retrn = []
             for result in results:
                 if result["gender"] is not None:
                     retrn.append((result["gender"], result["probability"], result["count"]))
@@ -113,7 +113,7 @@ def get_gender(name):
             # print(results["error"])
             return 'None'
         nf[name]=retrn[0][0]
-        np.save(data_dir+'/'+name_file)
+        np.save(data_dir+'/'+name_file,nf)
         return retrn[0][0]
 
 def clean_word(word):
