@@ -10,9 +10,13 @@ import requests, json
 from tabulate import tabulate
 from keys import consumer_key,consumer_secret,access_token,access_token_secret
 import datetime
+from nltk.corpus import stopwords
 
 data_dir= 'data'
 name_file= 'name.npy'
+
+stop = stopwords.words('english')
+stop= stop + [re.sub(r'[^A-Za-z0-9]+', '', x) for x in stop]
 
 class TwitterClient(object): 
     ''' 
@@ -39,6 +43,7 @@ class TwitterClient(object):
         '''
         # empty list to store parsed tweets 
         tweets = []
+        f_t=[]
         if count>max_tweets:
             count=max_tweets
         try: 
@@ -58,11 +63,13 @@ class TwitterClient(object):
                 if tweet.retweet_count > 0:
                     # if tweet has retweets, ensure that it is appended only once 
                     if parsed_tweet not in tweets: 
-                        tweets.append(parsed_tweet) 
+                        tweets.append(parsed_tweet)
+                        f_t.append(tweet) 
                 else: 
-                    tweets.append(parsed_tweet) 
+                    tweets.append(parsed_tweet)
+                    f_t.append(tweet)
             # return parsed tweets 
-            return tweets,fetched_tweets
+            return tweets,f_t
         except tweepy.TweepError as e: 
             # print error (if any) 
             print("Error : " + str(e))
@@ -127,7 +134,7 @@ def word_finder(fetched_tweets,num=10):
         for tt in text.tags:
             if tt[1] not in ["WRB","DT","VBZ","CC","IN","PRP","MD"]:
                 cw=clean_word(tt[0])
-                if len(cw)>2:
+                if (len(cw)>2) and (cw not in stop):
                     ct.append(cw)
     c=Counter(ct)
     return c.most_common()[:num]
@@ -209,8 +216,10 @@ def main(data_dir,query,count=100,Save=True,load=True):
         print("Male neutral reviews percentage: {} %".format(100*(len(mtweets)-len(nmtweets)-len(pmtweets))/len(mtweets)))
     else:
         print("ERROR: No male tweets")
+    
+    if len(tweets)!=0:
+        print("\nUknonwn names percentage: {} %".format(100*(len(tweets)-len(ftweets)-len(mtweets))/len(tweets)))
     # percentage of unknown names 
-    print("\nUknonwn names percentage: {} %".format(100*(len(tweets)-len(ftweets)-len(mtweets))/len(tweets)))
     # # printing first 5 positive tweets 
     # print("\n\nPositive tweets:") 
     # for tweet in ptweets[:10]: 
