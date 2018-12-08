@@ -1,13 +1,18 @@
 DEPENDENCIES:
-re - regex module
-tweepy -  twitter api's
-textblob - sentiment analysis and word tags
-numpy - statistics
-collections - Counter
-os, requests, json - for genderize.io's API
-tabulate - pretty print tables
-datetime - query time evaluation
-nltk.corpus.stopwords - stop word detection
+1. re - regex module
+2. tweepy -  twitter api's
+> pip install tweepy
+3. textblob - sentiment analysis and word tags
+> pip install textblob
+> python -m textblob.download_corpora
+4. numpy - statistics
+> pip install numpy
+5. collections - Counter
+6. os, requests, json - for genderize.io's API
+7. tabulate - pretty print tables
+> pip install tabulate
+8. datetime - query time evaluation
+9. nltk.corpus.stopwords - stop word detection
 
 USAGE:
 > python test.py
