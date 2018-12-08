@@ -10,7 +10,7 @@ datetime - query time evaluation
 nltk.corpus.stopwords - stop word detection
 
 USAGE:
->> python test.py
+> python test.py
 
 OUTPUTS:
 1. Sentiment breakdown of the query
@@ -20,7 +20,7 @@ OUTPUTS:
 5. Gender wise sentiment breakdown
 
 ADDITIONAL COMMANDS:
->> python create_name_dict.py  (creates the offline name dictionary)
+> python create_name_dict.py  (creates the offline name dictionary)
 
 REFERENCES:
 https://www.geeksforgeeks.org/twitter-sentiment-analysis-using-python/
